@@ -19,7 +19,30 @@
   
   <param name="robot_description" textfile="$(find tr1_description)/urdf/tr1.urdf"/>
 
-  <node name="tr1_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
-   args="-urdf -param robot_description -model tr1" />
+  <node name="tr1_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model tr1" />
+
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+		<param name="publish_frequency" type="double" value="30.0"/>
+	</node>
+
+  <rosparam file="$(find tr1_hardware_interface)/config/hardware.yaml" command="load"/>
+  <rosparam file="$(find tr1_hardware_interface)/config/controllers.yaml" command="load"/>
+  <rosparam file="$(find tr1_hardware_interface)/config/joint_limits.yaml" command="load"/>
+  <rosparam file="$(find tr1_hardware_interface)/config/joint_offsets.yaml" command="load"/>
+
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/"
+		args="
+			/tr1/controller/state
+			/tr1/controller/position/JointRightShoulderPan
+			/tr1/controller/position/JointRightShoulderTilt
+			/tr1/controller/position/JointRightUpperArmRoll
+			/tr1/controller/position/JointRightElbowFlex
+			/tr1/controller/position/JointRightForearmRoll
+			/tr1/controller/position/JointRightWristFlex
+			/tr1/controller/effort/JointRightWristRoll
+			/tr1/controller/effort/JointRightGripper
+			/tr1/controller/position/neck_to_head
+			/tr1/controller/position/neck_base_to_neck
+		"/>
 
 </launch>
