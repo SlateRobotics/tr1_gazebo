@@ -33,14 +33,7 @@
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/"
 		args="
 			/tr1/controller/state
-			/tr1/controller/position/JointRightShoulderPan
-			/tr1/controller/position/JointRightShoulderTilt
-			/tr1/controller/position/JointRightUpperArmRoll
-			/tr1/controller/position/JointRightElbowFlex
-			/tr1/controller/position/JointRightForearmRoll
-			/tr1/controller/position/JointRightWristFlex
-			/tr1/controller/effort/JointRightWristRoll
-			/tr1/controller/effort/JointRightGripper
+			/tr1/controller/trajectory/RightPosition
 			/tr1/controller/position/neck_to_head
 			/tr1/controller/position/neck_base_to_neck
 		"/>
