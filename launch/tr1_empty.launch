@@ -34,8 +34,14 @@
 		args="
 			/tr1/controller/state
 			/tr1/controller/trajectory/RightPosition
+			/tr1/controller/position/JointRightGripper
 			/tr1/controller/position/neck_to_head
 			/tr1/controller/position/neck_base_to_neck
+			/tr1/controller/effort/JointBaseWheelFR
+			/tr1/controller/effort/JointBaseWheelFL
+     	/tr1/controller/effort/JointBaseWheelBR
+			/tr1/controller/effort/JointBaseWheelBL
+			/tr1/controller/effort/JointTorsoExtension
 		"/>
 
 </launch>
