@@ -1,12 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-
   <arg name="world" default="empty"/> 
   <arg name="paused" default="false"/>
   <arg name="use_sim_time" default="true"/>
   <arg name="gui" default="true"/>
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
+
+  <rosparam file="$(find tr1_hardware_interface)/config/hardware.yaml" command="load"/>
+  <rosparam file="$(find tr1_hardware_interface)/config/controllers_sim.yaml" command="load"/>
+  <rosparam file="$(find tr1_hardware_interface)/config/joint_limits.yaml" command="load"/>
+  <rosparam file="$(find tr1_hardware_interface)/config/joint_offsets.yaml" command="load"/>
+
+	<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/"
+		args="
+			/tr1/controller/state
+			/tr1/controller/trajectory/RightPosition
+			/tr1/controller/trajectory/LeftPosition
+			/tr1/controller/position/JointRightGripper
+			/tr1/controller/position/neck_to_head
+			/tr1/controller/position/neck_base_to_neck
+			/tr1/controller/effort/JointBaseWheelFR
+			/tr1/controller/effort/JointBaseWheelFL
+     	/tr1/controller/effort/JointBaseWheelBR
+			/tr1/controller/effort/JointBaseWheelBL
+			/tr1/controller/effort/JointTorsoExtension
+		"/>
+
+<!--<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/"
+		args="
+			/tr1/controller/state
+			/tr1/controller/position/JointRightShoulderPan
+			/tr1/controller/position/JointRightShoulderTilt
+			/tr1/controller/position/JointRightUpperArmRoll
+			/tr1/controller/position/JointRightElbowFlex
+			/tr1/controller/position/JointRightForearmRoll
+			/tr1/controller/position/JointRightWristFlex
+			/tr1/controller/position/JointRightWristRoll
+			/tr1/controller/position/JointLeftShoulderPan
+			/tr1/controller/position/JointLeftShoulderTilt
+			/tr1/controller/position/JointLeftUpperArmRoll
+			/tr1/controller/position/JointLeftElbowFlex
+			/tr1/controller/position/JointLeftForearmRoll
+			/tr1/controller/position/JointLeftWristFlex
+			/tr1/controller/position/JointLeftWristRoll
+			/tr1/controller/position/JointRightGripper
+			/tr1/controller/position/neck_to_head
+			/tr1/controller/position/neck_base_to_neck
+			/tr1/controller/effort/JointBaseWheelFR
+			/tr1/controller/effort/JointBaseWheelFL
+     			/tr1/controller/effort/JointBaseWheelBR
+			/tr1/controller/effort/JointBaseWheelBL
+			/tr1/controller/effort/JointTorsoExtension
+		"/>-->
   
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find tr1_gazebo)/worlds/tr1_empty.world"/>
@@ -19,29 +65,9 @@
   
   <param name="robot_description" textfile="$(find tr1_description)/urdf/tr1.urdf"/>
 
-  <node name="tr1_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model tr1" />
-
 	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
 		<param name="publish_frequency" type="double" value="30.0"/>
 	</node>
 
-  <rosparam file="$(find tr1_hardware_interface)/config/hardware.yaml" command="load"/>
-  <rosparam file="$(find tr1_hardware_interface)/config/controllers.yaml" command="load"/>
-  <rosparam file="$(find tr1_hardware_interface)/config/joint_limits.yaml" command="load"/>
-  <rosparam file="$(find tr1_hardware_interface)/config/joint_offsets.yaml" command="load"/>
-
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/"
-		args="
-			/tr1/controller/state
-			/tr1/controller/trajectory/RightPosition
-			/tr1/controller/position/JointRightGripper
-			/tr1/controller/position/neck_to_head
-			/tr1/controller/position/neck_base_to_neck
-			/tr1/controller/effort/JointBaseWheelFR
-			/tr1/controller/effort/JointBaseWheelFL
-     	/tr1/controller/effort/JointBaseWheelBR
-			/tr1/controller/effort/JointBaseWheelBL
-			/tr1/controller/effort/JointTorsoExtension
-		"/>
-
+  <node name="tr1_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model tr1" />
 </launch>
