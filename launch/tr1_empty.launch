@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
+  <arg name="control" default="trajectory" />
   <arg name="world" default="empty"/> 
   <arg name="paused" default="false"/>
   <arg name="use_sim_time" default="true"/>
@@ -25,9 +26,9 @@
      	/tr1/controller/effort/JointBaseWheelBR
 			/tr1/controller/effort/JointBaseWheelBL
 			/tr1/controller/effort/JointTorsoExtension
-		"/>
+		" if="$(eval control == 'trajectory')"/>
 
-<!--<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/"
+	<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/"
 		args="
 			/tr1/controller/state
 			/tr1/controller/position/JointRightShoulderPan
@@ -52,7 +53,34 @@
      			/tr1/controller/effort/JointBaseWheelBR
 			/tr1/controller/effort/JointBaseWheelBL
 			/tr1/controller/effort/JointTorsoExtension
-		"/>-->
+		" if="$(eval control == 'position')"/>
+
+	<node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/"
+		args="
+			/tr1/controller/state
+			/tr1/controller/effort/JointRightShoulderPan
+			/tr1/controller/effort/JointRightShoulderTilt
+			/tr1/controller/effort/JointRightUpperArmRoll
+			/tr1/controller/effort/JointRightElbowFlex
+			/tr1/controller/effort/JointRightForearmRoll
+			/tr1/controller/effort/JointRightWristFlex
+			/tr1/controller/effort/JointRightWristRoll
+			/tr1/controller/effort/JointLeftShoulderPan
+			/tr1/controller/effort/JointLeftShoulderTilt
+			/tr1/controller/effort/JointLeftUpperArmRoll
+			/tr1/controller/effort/JointLeftElbowFlex
+			/tr1/controller/effort/JointLeftForearmRoll
+			/tr1/controller/effort/JointLeftWristFlex
+			/tr1/controller/effort/JointLeftWristRoll
+			/tr1/controller/effort/JointRightGripper
+			/tr1/controller/effort/neck_to_head
+			/tr1/controller/effort/neck_base_to_neck
+			/tr1/controller/effort/JointBaseWheelFR
+			/tr1/controller/effort/JointBaseWheelFL
+     			/tr1/controller/effort/JointBaseWheelBR
+			/tr1/controller/effort/JointBaseWheelBL
+			/tr1/controller/effort/JointTorsoExtension
+		" if="$(eval control == 'effort')"/>
   
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find tr1_gazebo)/worlds/tr1_empty.world"/>
